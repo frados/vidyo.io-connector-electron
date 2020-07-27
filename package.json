@@ -14,7 +14,7 @@
   ],
   "author": "Vidyo",
   "devDependencies": {
-    "electron": "^2.0.4",
+    "electron": "^9.1.0",
     "node-gyp": "^3.3.1"
   }
 }

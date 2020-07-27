@@ -20,7 +20,7 @@
             "<!(echo $VIDYO_CLIENT_LIB_DIR)/libVidyoClient.a",
           ],
           "xcode_settings": {
-            'MACOSX_DEPLOYMENT_TARGET': '10.8'
+            'MACOSX_DEPLOYMENT_TARGET': '10.15',
           }
         }],
         ['OS=="win"', {
@@ -54,7 +54,7 @@
                   }
               }
             },
-            'Release': {                            
+            'Release': {
               'msvs_settings': {
                 'VCLinkerTool': {
                   'AdditionalOptions': [
@@ -73,4 +73,3 @@
     }
   ]
 }
-

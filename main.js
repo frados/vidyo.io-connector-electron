@@ -15,7 +15,11 @@ let mainWindow
 
 function createWindow () {
   // Create the browser window.
-  mainWindow = new BrowserWindow({width: 1200, height: 900})
+  mainWindow = new BrowserWindow({width: 1200, height: 900,
+    webPreferences: {
+      nodeIntegration: true
+    }
+  });
 
   // and load VidyoConnector.html
   mainWindow.loadURL(url.format({

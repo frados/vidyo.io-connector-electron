@@ -16,9 +16,9 @@ void VidyoAddonInit(const FunctionCallbackInfo<Value>& args)
   Isolate* isolate = args.GetIsolate();
 
   if (VidyoClientElectronInit())
-    args.GetReturnValue().Set(String::NewFromUtf8(isolate, "Succeed"));
+    args.GetReturnValue().Set(String::NewFromUtf8(isolate, "Succeed").ToLocalChecked());
   else
-    args.GetReturnValue().Set(String::NewFromUtf8(isolate, "Fail"));
+    args.GetReturnValue().Set(String::NewFromUtf8(isolate, "Fail").ToLocalChecked());
 }
 
 void VidyoAddonUninit(const FunctionCallbackInfo<Value>& args)
@@ -28,19 +28,21 @@ void VidyoAddonUninit(const FunctionCallbackInfo<Value>& args)
 
 void VidyoAddonDispatch(const FunctionCallbackInfo<Value>& args)
 {
+  v8::Local<v8::Context> context = args.GetIsolate()->GetCurrentContext();
   Isolate* isolate = args.GetIsolate();
-  String::Utf8Value data(args[0]->ToString());
+  //v8::String::Utf8Value string(value); to v8::String::Utf8Value string(v8::Isolate::GetCurrent(), value);
+  String::Utf8Value data(v8::Isolate::GetCurrent(), args[0]->ToString(context).ToLocalChecked());
   std::string request(*data);
   LmiString requestSt;
   LmiString responseSt;
   LmiAllocator *alloc;
 
-  alloc = LmiMallocAllocatorGetDefault(); 
+  alloc = LmiMallocAllocatorGetDefault();
   LmiStringConstructCStr(&requestSt, request.c_str(), alloc);
   LmiStringConstructDefault(&responseSt, alloc);
   VidyoClientElectronDispatch(&requestSt, &responseSt);
 
-  args.GetReturnValue().Set(String::NewFromUtf8(isolate, LmiStringCStr(&responseSt)));
+  args.GetReturnValue().Set(String::NewFromUtf8(isolate, LmiStringCStr(&responseSt)).ToLocalChecked());
 }
 
 void init(Local<Object> exports) {
@@ -50,4 +52,3 @@ void init(Local<Object> exports) {
 }
 
 NODE_MODULE(VidyoAddon, init)
-
